@@ -37,3 +37,9 @@
     cursor: pointer;
   }
   
+  .loader-section{
+    position: fixed;
+    z-index: 1000;
+    left: 45%;
+    top: 40%;
+  }

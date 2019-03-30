@@ -3,8 +3,16 @@ import Header from "../../utils/header";
 import axios from "axios";
 import AutoComplete from "../Dropdown/AutoComplete";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import Loader from 'react-loader-spinner';
+import { css } from '@emotion/core';
+import PacmanLoader from 'react-spinners/PacmanLoader';
 import "./Home.css";
+
+const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: red;
+`;
 
 class Home extends Component {
   constructor(props) {
@@ -41,7 +49,8 @@ class Home extends Component {
 
       showFilter: false,
       filter1: false,
-      filter2: false
+      filter2: false,
+      loading: true
     };
   }
   componentWillMount = () => {
@@ -53,7 +62,6 @@ class Home extends Component {
             courses: data
           },
           () => {
-            console.log("course : ", this.state.courses);
             this.settingData();
           }
         );
@@ -98,7 +106,8 @@ class Home extends Component {
       universities: universities,
       parentSubject: parentSubject,
       courseName: courseName,
-      childSubject: childSubject
+      childSubject: childSubject,
+      loading: false
     });
   };
 
@@ -149,7 +158,7 @@ class Home extends Component {
       showSuggestions: false,
       userInput: e.currentTarget.innerText,
       selectedValue: e.currentTarget.innerText,
-      showFilter: true
+      showFilter: false
     });
   };
 
@@ -229,19 +238,12 @@ class Home extends Component {
   };
 
   filterByLength = (sliderValue, course) => {
-    console.log("course['Length'] : ", course["Length"]);
-    console.log("sliderValue : ", parseInt(sliderValue));
-    console.log(
-      "(course[Length] === sliderValue) : ",
-      course["Length"] === parseInt(sliderValue)
-    );
     if (course["Length"] === parseInt(sliderValue)) {
       return true;
     } else {
       return false;
     }
   };
-
   filterByDateAndLength = (sliderValue, startDate, course) => {
     if (
       course["Length"] === parseInt(sliderValue) &&
@@ -468,13 +470,32 @@ class Home extends Component {
           }
         }
       });
+    }else{
+        courseList = courses.map((course, index) => {
+            counter++
+           return <li className="list-group-item" key={index}>
+                {course["Course Name"]}
+            </li>
+        })
     }
-    console.group("course list : ", courseList);
+    console.log('loading : ', this.state.loading)
     return (
-      <Fragment>
+      <Fragment> 
+        {this.state.loading && 
+            <div style={style.overlay}></div>
+        }  
         <Header />
-        <div className="container" style={{ opacity: "1" }}>
+        <div className="container">
           <div className="row" style={style.row}>
+            <div className='loader-section'>
+                <PacmanLoader
+                css={override}
+                sizeUnit={"px"}
+                size={80}
+                color={'#813588'}
+                loading={this.state.loading}
+                />
+            </div>
             <form
               className="col-md-8"
               onSubmit={e => e.preventDefault()}
@@ -678,17 +699,24 @@ class Home extends Component {
 }
 
 const style = {
+  overlay:{
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 999,
+    background: '#000000',
+    opacity: 0.6
+  },
   row: {
     height: "80vh"
   },
   leftRow: {
     maxWidth: "1000px",
     margin: " 0 auto"
-    // background: '#e0e0e0'
   },
   listItem: {
-    // background: 'white',
-    // border:'1px solid #e0e0e0',
     height: "100%",
     overflowY: "auto"
   },
@@ -712,7 +740,6 @@ const style = {
     fontFamily: "sans-serif",
     fontSize: "larger",
     color: "white"
-    // background:'#e0e0e0'
   }
 };
 
