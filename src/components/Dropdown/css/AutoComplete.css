@@ -1,0 +1,45 @@
+
+  /* input {
+    border: 1px solid #999;
+    padding: 0.5rem;
+    width: 300px;
+  } */
+  
+  .no-suggestions {
+    position: absolute;
+    z-index: 1;
+    color: #999;
+    font-size: small;
+    margin: 0px 5px;
+    color: #989898
+  }
+  
+  .suggestions {
+    position: absolute;
+    z-index: 1;
+    background: aliceblue;
+    border: 1px solid #999;
+    border-top-width: 0;
+    list-style: none;
+    margin-top: 0;
+    max-height: 143px;
+    overflow-y: auto;
+    padding-left: 0;
+    width: 97%;
+  }
+  
+  .suggestions li {
+    padding: 0.5rem;
+  }
+  
+  .suggestion-active,
+  .suggestions li:hover {
+    background-color: #acacac;
+    color: #000000;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  
+  .suggestions li:not(:last-of-type) {
+    border-bottom: 1px solid #999;
+  }
